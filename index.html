@@ -46,27 +46,35 @@
     .hero{
       display:grid;grid-template-columns:1fr auto;
       border-bottom:1px solid var(--border);
+      min-height:90vh;
+      position:relative;
+      overflow:hidden;
+      background-image:
+        radial-gradient(rgba(139,94,60,0.045) 1px, transparent 1px),
+        radial-gradient(ellipse at 75% 40%, rgba(196,154,108,0.18) 0%, transparent 55%),
+        linear-gradient(135deg, #F5F0E8 0%, #EDE4D3 45%, #D4B896 100%);
+      background-size:24px 24px, 100% 100%, 100% 100%;
     }
     .hero-left{
-      padding:56px 48px 56px;
-      border-right:1px solid var(--border);
+      padding:72px 52px 72px 48px;
       display:flex;flex-direction:column;justify-content:center;
+      position:relative;z-index:2;
     }
     .h-eye{
       font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;
-      color:var(--warm);margin-bottom:22px;
+      color:var(--warm);margin-bottom:24px;
       display:flex;align-items:center;gap:10px;
     }
     .h-eye::before{content:'';width:20px;height:1px;background:var(--warm);}
     .hero-title{
       font-family:'Playfair Display',serif;
-      font-size:clamp(40px,5vw,68px);font-weight:700;
-      line-height:1.0;color:var(--ink);margin-bottom:22px;
+      font-size:clamp(2.5rem,5vw,4.5rem);font-weight:700;
+      line-height:1.05;color:var(--ink);margin-bottom:24px;
     }
     .hero-title em{font-style:italic;color:var(--warm);}
     .hero-sub{
       font-size:14px;color:var(--muted);line-height:1.85;
-      max-width:380px;margin-bottom:30px;
+      max-width:400px;margin-bottom:32px;
     }
     .link-cta{
       font-size:14px;font-weight:500;
@@ -76,15 +84,36 @@
     }
     .link-cta:hover{color:var(--warm);}
 
+    /* Hero coffee cup image */
+    .hero-cup{
+      position:absolute;
+      right:280px; top:50%;
+      transform:translateY(-50%) rotate(-8deg);
+      width:380px; height:380px;
+      border-radius:50%;
+      overflow:hidden;
+      z-index:1;
+      filter:drop-shadow(0 24px 56px rgba(80,40,10,0.28));
+      opacity:0.9;
+      pointer-events:none;
+    }
+    .hero-cup img{
+      width:100%;height:100%;object-fit:cover;
+      transform:scale(1.08);
+    }
+
+    /* DATE WIDGET */
     .date-widget{
-      padding:56px 52px;
+      padding:72px 52px;
       display:flex;flex-direction:column;align-items:flex-end;justify-content:center;
-      min-width:260px;
+      min-width:240px;
+      position:relative;z-index:2;
+      border-left:2px solid #8B5E3C;
     }
     .dw-day{
       font-family:'Playfair Display',serif;
-      font-size:clamp(80px,11vw,148px);font-weight:700;
-      line-height:0.85;color:var(--ink);letter-spacing:-4px;
+      font-size:clamp(72px,8vw,120px);font-weight:700;
+      line-height:0.88;color:var(--ink);letter-spacing:-3px;
     }
     .dw-weekday{
       font-size:11px;font-weight:600;letter-spacing:4px;text-transform:uppercase;
@@ -96,9 +125,16 @@
     }
     .dw-time{
       font-family:'Playfair Display',serif;
-      font-size:28px;font-weight:400;font-style:italic;
+      font-size:26px;font-weight:400;font-style:italic;
       color:var(--warm);margin-top:6px;
     }
+    .dw-status{
+      margin-top:10px;
+      font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+      padding:4px 10px;border-radius:2px;
+    }
+    .dw-status.open{background:rgba(74,103,65,0.12);color:#4A6741;border:1px solid rgba(74,103,65,0.25);}
+    .dw-status.closed{background:rgba(139,94,60,0.1);color:var(--warm);border:1px solid rgba(139,94,60,0.2);}
 
     /* TODAY GRID */
     .today-grid{
@@ -252,13 +288,19 @@
     @media(max-width:800px){
       header{padding:0 20px;}
       .hero,.today-grid,.about-grid,.visit-grid{grid-template-columns:1fr;}
-      .hero-left{border-right:none;border-bottom:1px solid var(--border);padding:40px 20px;}
-      .date-widget{align-items:flex-start;padding:32px 20px;border-top:none;}
+      .hero{min-height:auto;}
+      .hero-cup{display:none;}
+      .hero-left{border-right:none;border-bottom:1px solid var(--border);padding:48px 20px 40px;}
+      .date-widget{
+        align-items:flex-start;padding:32px 20px;
+        border-left:none;border-top:2px solid #8B5E3C;
+      }
       .special{border-right:none;border-bottom:1px solid var(--border);}
       .special,.today-panel,.section{padding:40px 20px;}
       .menu-cols{grid-template-columns:1fr;}
       .h-nav{display:none;}
       footer{padding:32px 20px;}
+      .about-grid{gap:36px;}
     }
   </style>
 </head>
@@ -282,9 +324,14 @@
 
 <!-- HERO -->
 <section class="hero">
+  <!-- Floating coffee cup -->
+  <div class="hero-cup" aria-hidden="true">
+    <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=700&q=80" alt="">
+  </div>
+
   <div class="hero-left">
     <div class="h-eye" data-i18n="h_eye">Specialty Coffee · Berlin</div>
-    <h1 class="hero-title" data-i18n_raw="h_title">The coffee<br>that <em>stays</em><br>with you.</h1>
+    <h1 class="hero-title">The coffee<br>that <em>stays</em><br>with you.</h1>
     <p class="hero-sub" data-i18n="h_sub">Single-origin espresso, seasonal filter and handmade pastries. Every cup sourced, roasted and brewed with intent.</p>
     <a class="link-cta" href="#today" data-i18n="h_cta">→ What's on today</a>
   </div>
@@ -293,6 +340,7 @@
     <div class="dw-weekday" id="dw-weekday">Thursday</div>
     <div class="dw-month" id="dw-month">May 2026</div>
     <div class="dw-time" id="dw-time">09:41</div>
+    <div class="dw-status open" id="dw-status">Open now</div>
   </div>
 </section>
 
@@ -301,7 +349,7 @@
   <div class="special">
     <div class="sec-label" data-i18n="sp_lbl">Today's Special</div>
     <div class="dish-photo">
-      <div class="dish-photo-icon">☕</div>
+      <img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?w=700&q=80" alt="Honey Oat Flat White" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;">
     </div>
     <div class="dish-name" data-i18n="sp_name">Honey Oat Flat White</div>
     <p class="dish-desc" data-i18n="sp_desc">Ristretto · oat milk · wildflower honey · Madagascar vanilla. Available until 14:00.</p>
@@ -379,7 +427,9 @@
 <!-- ABOUT -->
 <section class="section" id="about">
   <div class="about-grid">
-    <div class="about-photo">☕</div>
+    <div class="about-photo">
+      <img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=700&q=80" alt="Brew & Soul café" style="width:100%;height:100%;object-fit:cover;display:block;">
+    </div>
     <div>
       <div class="a-label" data-i18n="ab_lbl">Our Story</div>
       <h2 class="a-head">Coffee as a<br><em data-i18n="ab_em">daily ritual.</em></h2>
@@ -418,7 +468,7 @@
 </footer>
 
 <script>
-// Live clock
+// Live clock + open/closed
 function updateClock(){
   const now=new Date();
   const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
@@ -426,7 +476,16 @@ function updateClock(){
   document.getElementById('dw-day').textContent=String(now.getDate()).padStart(2,'0');
   document.getElementById('dw-weekday').textContent=days[now.getDay()];
   document.getElementById('dw-month').textContent=months[now.getMonth()]+' '+now.getFullYear();
-  document.getElementById('dw-time').textContent=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+  const h=now.getHours(), m=now.getMinutes();
+  document.getElementById('dw-time').textContent=String(h).padStart(2,'0')+':'+String(m).padStart(2,'0');
+  // Open/closed logic
+  const t=h*60+m, day=now.getDay();
+  let open=false;
+  if(day>=1&&day<=5) open=(t>=8*60&&t<19*60);     // Mon–Fri 08–19
+  else if(day===6)   open=(t>=9*60&&t<18*60);      // Sat 09–18
+  else               open=(t>=10*60&&t<16*60);      // Sun 10–16
+  const el=document.getElementById('dw-status');
+  if(el){el.textContent=open?'Open now':'Closed';el.className='dw-status '+(open?'open':'closed');}
 }
 updateClock();
 setInterval(updateClock,10000);
